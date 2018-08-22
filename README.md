@@ -1,3 +1,15 @@
+# Serverless AWS Documentation
+
+This is a fork with specific workarounds for my local project. This project is not maintained. The workarounds are:
+* centralized place to get the `RestApiId` parameter to use a [shared API Gateway](https://serverless.com/framework/docs/providers/aws/events/apigateway/#share-api-gateway-and-api-resources)
+  * original issue https://github.com/deliveryhero/serverless-aws-documentation/issues/74
+* use CloudFormation Output of different stacks
+  * idea in our project: there is one shared stack, which defines the API Gateway and all related models. The models are exported as Outputs and reused in other stacks. 
+  * original issue https://github.com/deliveryhero/serverless-aws-documentation/issues/74
+
+
+# Original Readme
+
 [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com) [![Build Status](https://travis-ci.org/9cookies/serverless-aws-documentation.svg?branch=master)](https://travis-ci.org/9cookies/serverless-aws-documentation) [![codecov](https://codecov.io/gh/9cookies/serverless-aws-documentation/branch/master/graph/badge.svg)](https://codecov.io/gh/9cookies/serverless-aws-documentation) [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/hyperium/hyper/master/LICENSE)
 
 # Serverless AWS Documentation

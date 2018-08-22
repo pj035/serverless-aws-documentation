@@ -29,7 +29,7 @@ function _mapToObj(map) {
  * the basic ones, so we need to make sure we only look for
  * the appropriate properties.
  */
-function determinePropertiesToGet (type) {
+function determinePropertiesToGet(type) {
   const defaultProperties = ['description', 'summary']
   let result = defaultProperties
   switch (type) {
@@ -46,7 +46,7 @@ function determinePropertiesToGet (type) {
 
 var autoVersion;
 
-module.exports = function() {
+module.exports = function () {
   return {
     _createDocumentationPart: function _createDocumentationPart(part, def, knownLocation) {
       const location = part.locationProps.reduce((loc, property) => {
@@ -99,17 +99,17 @@ module.exports = function() {
         restApiId: this.restApiId,
         documentationVersion: this.getDocumentationVersion(),
       }).then(() => {
-          const msg = 'documentation version already exists, skipping upload';
-          console.info('-------------------');
-          console.info(msg);
-          return Promise.reject(msg);
-        }, err => {
-          if (err.message === 'Invalid Documentation version specified') {
-            return Promise.resolve();
-          }
+        const msg = 'documentation version already exists, skipping upload';
+        console.info('-------------------');
+        console.info(msg);
+        return Promise.reject(msg);
+      }, err => {
+        if (err.message === 'Invalid Documentation version specified') {
+          return Promise.resolve();
+        }
 
-          return Promise.reject(err);
-        })
+        return Promise.reject(err);
+      })
         .then(() =>
           aws.request('APIGateway', 'getDocumentationParts', {
             restApiId: this.restApiId,
@@ -117,11 +117,13 @@ module.exports = function() {
           })
         )
         .then(results => results.items.map(
-          part => aws.request('APIGateway', 'deleteDocumentationPart', {
-            documentationPartId: part.id,
-            restApiId: this.restApiId,
+          part => {
+            return aws.request('APIGateway', 'deleteDocumentationPart', {
+              documentationPartId: part.id,
+              restApiId: this.restApiId,
+            })
           })
-        ))
+        )
         .then(promises => Promise.all(promises))
         .then(() => this.documentationParts.reduce((promise, part) => {
           return promise.then(() => {
@@ -209,7 +211,7 @@ module.exports = function() {
           resource.Properties.RequestParameters = {};
         }
 
-        documentationPart.forEach(function(qp) {
+        documentationPart.forEach(function (qp) {
           const source = `method.request.${mapPath}.${qp.name}`;
           if (resource.Properties.RequestParameters.hasOwnProperty(source)) return; // don't mess with existing config
           resource.Properties.RequestParameters[source] = qp.required || false;
@@ -238,9 +240,9 @@ module.exports = function() {
             'querystring'
           );
           this.addDocumentationToApiGateway(
-              resource,
-              eventTypes.http.documentation.pathParams,
-              'path'
+            resource,
+            eventTypes.http.documentation.pathParams,
+            'path'
           );
         }
         resource.DependsOn = Array.from(resource.DependsOn);

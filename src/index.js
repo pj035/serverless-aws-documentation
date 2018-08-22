@@ -1,6 +1,7 @@
 'use strict';
 const documentation = require('./documentation');
 const models = require('./models');
+const utils = require('./utils');
 
 class ServerlessAWSDocumentation {
   constructor(serverless, options) {
@@ -15,6 +16,8 @@ class ServerlessAWSDocumentation {
     const naming = this.serverless.providers.aws.naming;
     this.getMethodLogicalId = naming.getMethodLogicalId.bind(naming);
     this.normalizePath = naming.normalizePath.bind(naming);
+
+    utils.setServerless(this.serverless);
 
     this._beforeDeploy = this.beforeDeploy.bind(this)
     this._afterDeploy = this.afterDeploy.bind(this)
@@ -51,9 +54,7 @@ class ServerlessAWSDocumentation {
     // Add models
     this.cfTemplate.Outputs.AwsDocApiId = {
       Description: 'API ID',
-      Value: {
-        Ref: 'ApiGatewayRestApi',
-      },
+      Value: utils.getRestApiId(),
     };
   }
 
